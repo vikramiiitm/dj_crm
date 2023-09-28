@@ -110,12 +110,12 @@ WSGI_APPLICATION = "crm.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["DBNAME"],
-        "USER": os.environ["DBUSER"],
-        "PASSWORD": os.environ["DBPASSWORD"],
-        "HOST": os.environ["DBHOST"],
-        "PORT": os.environ["DBPORT"],
+    "ENGINE": "django.db.backends.postgresql_psycopg2",
+    "NAME": "dj_crm",
+    "USER": "postgres",
+    "PASSWORD": "metromax@2022",
+    "HOST": "localhost",
+    "PORT": 5432,
     }
 }
 
@@ -158,21 +158,21 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-ENV_TYPE = os.environ["ENV_TYPE"]
-print(">>> ENV_TYPE", ENV_TYPE)
-if ENV_TYPE == "dev":
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-    MEDIA_URL = "/media/"
-elif ENV_TYPE == "prod":
-    from .server_settings import *
+# ENV_TYPE = os.environ["ENV_TYPE"]
+# print(">>> ENV_TYPE", ENV_TYPE)
+# if ENV_TYPE == "dev":
+#     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+#     MEDIA_URL = "/media/"
+# elif ENV_TYPE == "prod":
+#     from .server_settings import *
 
-DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
-ADMIN_EMAIL = os.environ["ADMIN_EMAIL"]
+# DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
+# ADMIN_EMAIL = os.environ["ADMIN_EMAIL"]
 
 
 # celery Tasks
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
-CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
+# CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+# CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
 
 
 LOGGING = {
@@ -299,6 +299,6 @@ SIMPLE_JWT = {
 JWT_ALGO = "HS256"
 
 
-DOMAIN_NAME = os.environ["DOMAIN_NAME"]
-SWAGGER_ROOT_URL = os.environ["SWAGGER_ROOT_URL"]
+# DOMAIN_NAME = os.environ["DOMAIN_NAME"]
+# SWAGGER_ROOT_URL = os.environ["SWAGGER_ROOT_URL"]
 

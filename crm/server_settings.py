@@ -43,6 +43,6 @@ sentry_sdk.init(
     send_default_pii=True,
 )
 
-RAVEN_CONFIG = {
-    "dsn": os.environ["SENTRY_DSN"],
-}
+# RAVEN_CONFIG = {
+#     "dsn": os.environ["SENTRY_DSN"],
+# }
