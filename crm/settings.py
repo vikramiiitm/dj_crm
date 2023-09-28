@@ -112,7 +112,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("DBNAME","crm_dev_db_1"),
-        "USER": os.environ.get("DBUSER","}39e6zsEmwrb"),
+        "USER": os.environ.get("DBUSER","crm_dev_usr_1"),
         "PASSWORD": os.environ.get("DBPASSWORD","}39e6zsEmwrb"),
         "HOST": os.environ.get("DBHOST","innowyze-db.chfpahtkoofs.us-east-1.rds.amazonaws.com"),
         "PORT": os.environ.get("DBPORT",5432),
