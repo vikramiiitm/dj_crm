@@ -111,11 +111,11 @@ WSGI_APPLICATION = "crm.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["DBNAME"],
-        "USER": os.environ["DBUSER"],
-        "PASSWORD": os.environ["DBPASSWORD"],
-        "HOST": os.environ["DBHOST"],
-        "PORT": os.environ["DBPORT"],
+        "NAME": os.environ.get("DBNAME","crm_dev_db_1"),
+        "USER": os.environ.get("DBUSER","}39e6zsEmwrb"),
+        "PASSWORD": os.environ.get("DBPASSWORD","}39e6zsEmwrb"),
+        "HOST": os.environ.get("DBHOST","innowyze-db.chfpahtkoofs.us-east-1.rds.amazonaws.com"),
+        "PORT": os.environ.get("DBPORT",5432),
     }
 }
 
