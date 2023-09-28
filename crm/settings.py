@@ -110,12 +110,12 @@ WSGI_APPLICATION = "crm.wsgi.application"
 
 DATABASES = {
     "default": {
-    "ENGINE": "django.db.backends.postgresql_psycopg2",
-    "NAME": "dj_crm",
-    "USER": "postgres",
-    "PASSWORD": "metromax@2022",
-    "HOST": "localhost",
-    "PORT": 5432,
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["DBNAME"],
+        "USER": os.environ["DBUSER"],
+        "PASSWORD": os.environ["DBPASSWORD"],
+        "HOST": os.environ["DBHOST"],
+        "PORT": os.environ["DBPORT"],
     }
 }
 
