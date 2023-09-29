@@ -300,5 +300,5 @@ JWT_ALGO = "HS256"
 
 
 # DOMAIN_NAME = os.environ["DOMAIN_NAME"]
-# SWAGGER_ROOT_URL = os.environ["SWAGGER_ROOT_URL"]
+SWAGGER_ROOT_URL = 'http://18.190.249.129/'
 
