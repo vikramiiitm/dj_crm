@@ -141,8 +141,11 @@ class LeadListView(APIView, LimitOffsetPagination):
     )
     def post(self, request, *args, **kwargs):
         params = request.post_data
+        print(f"params: ", params)
         serializer = LeadCreateSerializer(data=params, request_obj=request)
+        print("test")
         if serializer.is_valid():
+            print('success')
             lead_obj = serializer.save(created_by=request.profile, org=request.org)
             if params.get("tags"):
                 tags = json.loads(params.get("tags"))
@@ -203,19 +206,19 @@ class LeadListView(APIView, LimitOffsetPagination):
                 account_object.billing_state = lead_obj.state
                 account_object.billing_postcode = lead_obj.postcode
                 account_object.billing_country = lead_obj.country
-                comments = Comment.objects.filter(lead=self.lead_obj)
-                if comments.exists():
-                    for comment in comments:
-                        comment.account_id = account_object.id
-                attachments = Attachments.objects.filter(lead=self.lead_obj)
-                if attachments.exists():
-                    for attachment in attachments:
-                        attachment.account_id = account_object.id
-                for tag in lead_obj.tags.all():
-                    account_object.tags.add(tag)
+                # comments = Comment.objects.filter(lead=self.lead_obj)
+                # if comments.exists():
+                #     for comment in comments:
+                #         comment.account_id = account_object.id
+                # attachments = Attachments.objects.filter(lead=self.lead_obj)
+                # if attachments.exists():
+                #     for attachment in attachments:
+                #         attachment.account_id = account_object.id
+                # for tag in lead_obj.tags.all():
+                #     account_object.tags.add(tag)
 
                 if params.get("assigned_to"):
-                    assigned_to_list = json.loads(params.getlist("assigned_to"))
+                    assigned_to_list = json.loads(params.get("assigned_to"))
                     recipients = assigned_to_list
                     send_email_to_assigned_user.delay(
                         recipients,
@@ -247,7 +250,7 @@ class LeadDetailView(APIView):
         return get_object_or_404(Lead, id=pk)
 
     def get_context_data(self, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         context = {}
         user_assgn_list = [
             assigned_to.id for assigned_to in self.lead_obj.assigned_to.all()
@@ -673,7 +676,7 @@ class CreateLeadFromSite(APIView):
         tags=["Leads"], manual_parameters=swagger_params.create_lead_from_site
     )
     def post(self, request, *args, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         api_key = params.get("apikey")
         # api_setting = APISettings.objects.filter(
         #     website=website_address, apikey=api_key).first()

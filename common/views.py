@@ -124,7 +124,7 @@ class UserDetailView(APIView):
         tags=["Users"], manual_parameters=swagger_params.user_update_params
     )
     def put(self, request, pk, format=None):
-        params = request.post_data
+        params = self.request.query_params
         profile = self.get_object(pk)
         address_obj = profile.address
         if (
@@ -209,7 +209,7 @@ class ChangePasswordView(APIView):
         manual_parameters=swagger_params.change_password_params,
     )
     def post(self, request, format=None):
-        params = request.post_data
+        params = self.request.query_params
         context = {"user": request.user}
         serializer = PasswordChangeSerializer(data=params, context=context)
         if serializer.is_valid():
@@ -280,7 +280,7 @@ class LoginView(APIView):
         manual_parameters=swagger_params.login_page_params,
     )
     def post(self, request):
-        serializer = self.serializer_class(data=request.post_data)  #<------
+        serializer = self.serializer_class(data=self.request.query_params)  #<------
         serializer.is_valid(raise_exception=True)
         return Response(
             {
@@ -302,11 +302,11 @@ class RegistrationView(APIView):
     )
     def post(self, request, format=None):
 
-        serializer = self.serializer_class(data=request.post_data)
+        serializer = self.serializer_class(data=self.request.query_params)
 
         if serializer.is_valid():
             user_obj = serializer.save()
-            password = request.post_data.get("password")
+            password = self.request.query_params.get("password")
             user_obj.password = make_password(password)
             user_obj.save()
             # sending mail for confirm password
@@ -340,9 +340,9 @@ class OrgProfileCreateView(APIView):
         manual_parameters=swagger_params.post_org_creation_page_params,
     )
     def post(self, request, format=None):
-        params = request.post_data
+        params = self.request.query_params
 
-        serializer = self.serializer_class(data=request.post_data)
+        serializer = self.serializer_class(data=self.request.query_params)
         if serializer.is_valid():
             org_obj = serializer.save()
 
@@ -419,7 +419,7 @@ class UsersListView(APIView, LimitOffsetPagination):
                 status=status.HTTP_403_FORBIDDEN,
             )
         else:
-            params = request.post_data
+            params = self.request.query_params
             if params:
                 user_serializer = CreateUserSerializer(data=params, org=request.org)
                 address_serializer = BillingAddressSerializer(data=params)
@@ -473,7 +473,7 @@ class UsersListView(APIView, LimitOffsetPagination):
                 status=status.HTTP_403_FORBIDDEN,
             )
         queryset = Profile.objects.filter(org=request.org).order_by("-id")
-        params = request.post_data
+        params = self.request.query_params
         if params:
             if params.get("email"):
                 queryset = queryset.filter(user__email__icontains=params.get("email"))
@@ -533,7 +533,7 @@ class DocumentListView(APIView, LimitOffsetPagination):
     model = Document
 
     def get_context_data(self, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         queryset = self.model.objects.filter(org=self.request.org).order_by("-id")
         if self.request.user.is_superuser or self.request.profile.role == "ADMIN":
             queryset = queryset
@@ -631,7 +631,7 @@ class DocumentListView(APIView, LimitOffsetPagination):
         tags=["documents"], manual_parameters=swagger_params.document_create_params
     )
     def post(self, request, *args, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         serializer = DocumentCreateSerializer(data=params, request_obj=request)
         if serializer.is_valid():
             doc = serializer.save(
@@ -749,7 +749,7 @@ class DocumentDetailView(APIView):
     )
     def put(self, request, pk, format=None):
         self.object = self.get_object(pk)
-        params = request.post_data
+        params = self.request.query_params
         if not self.object:
             return Response(
                 {"error": True, "errors": "Document does not exist"},
@@ -811,7 +811,7 @@ class ForgotPasswordView(APIView):
         tags=["Auth"], manual_parameters=swagger_params.forgot_password_params
     )
     def post(self, request, format=None):
-        params = request.post_data
+        params = self.request.query_params
         serializer = ForgotPasswordSerializer(data=params)
         if serializer.is_valid():
             user = get_object_or_404(User, email=params.get("email"))
@@ -840,7 +840,7 @@ class ResetPasswordView(APIView):
         tags=["Auth"], manual_parameters=swagger_params.reset_password_params
     )
     def post(self, request, uid, token, format=None):
-        params = request.post_data
+        params = self.request.query_params
         try:
             uid = force_str(urlsafe_base64_decode(uid))
             user_obj = User.objects.get(pk=uid)
@@ -888,7 +888,7 @@ class UserStatusView(APIView):
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
-        params = request.post_data
+        params = self.request.query_params
         profiles = Profile.objects.filter(org=request.org)
         profile = profiles.get(id=pk)
 
@@ -941,7 +941,7 @@ class DomainList(APIView):
         tags=["Settings"], manual_parameters=swagger_params.api_setting_create_params
     )
     def post(self, request, *args, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         assign_to_list = []
         if params.get("lead_assigned_to"):
             assign_to_list = json.loads(params.get("lead_assigned_to"))
@@ -987,7 +987,7 @@ class DomainDetailView(APIView):
     )
     def put(self, request, pk, **kwargs):
         api_setting = self.get_object(pk)
-        params = request.post_data
+        params = self.request.query_params
         assign_to_list = []
         if params.get("lead_assigned_to"):
             assign_to_list = json.loads(params.get("lead_assigned_to"))
@@ -1108,7 +1108,7 @@ class ResendActivationLinkView(APIView):
         tags=["Auth"], manual_parameters=swagger_params.forgot_password_params
     )
     def post(self, request, format=None):
-        params = request.post_data
+        params = self.request.query_params
         user = get_object_or_404(User, email=params.get("email"))
         if user.is_active:
             return Response(

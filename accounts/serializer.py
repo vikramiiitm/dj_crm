@@ -105,31 +105,31 @@ class AccountCreateSerializer(serializers.ModelSerializer):
         request_obj = kwargs.pop("request_obj", None)
         super().__init__(*args, **kwargs)
         self.fields["status"].required = False
-        if account_view:
-            self.fields["billing_address_line"].required = True
-            self.fields["billing_street"].required = True
-            self.fields["billing_city"].required = True
-            self.fields["billing_state"].required = True
-            self.fields["billing_postcode"].required = True
-            self.fields["billing_country"].required = True
-
-        if self.instance:
-            self.fields["lead"].required = False
+    #     # if account_view:
+    #     #     self.fields["billing_address_line"].required = True
+    #     #     self.fields["billing_street"].required = True
+    #     #     self.fields["billing_city"].required = True
+    #     #     self.fields["billing_state"].required = True
+    #     #     self.fields["billing_postcode"].required = True
+    #     #     self.fields["billing_country"].required = True
+    #
+    #     # if self.instance:
+    #     #     self.fields["lead"].required = False
         self.fields["lead"].required = False
         self.org = request_obj.org
-
-    def validate_name(self, name):
-        if self.instance:
-            if self.instance.name != name:
-                if not Account.objects.filter(name__iexact=name, org=self.org).exists():
-                    return name
-                raise serializers.ValidationError(
-                    "Account already exists with this name"
-                )
-            return name
-        if not Account.objects.filter(name__iexact=name, org=self.org).exists():
-            return name
-        raise serializers.ValidationError("Account already exists with this name")
+    #
+    # def validate_name(self, name):
+    #     if self.instance:
+    #         if self.instance.name != name:
+    #             if not Account.objects.filter(name__iexact=name, org=self.org).exists():
+    #                 return name
+    #             raise serializers.ValidationError(
+    #                 "Account already exists with this name"
+    #             )
+    #         return name
+    #     if not Account.objects.filter(name__iexact=name, org=self.org).exists():
+    #         return name
+    #     raise serializers.ValidationError("Account already exists with this name")
 
     class Meta:
         model = Account

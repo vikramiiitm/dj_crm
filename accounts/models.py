@@ -62,12 +62,12 @@ class Account(models.Model):
         "leads.Lead", related_name="account_leads", on_delete=models.SET_NULL, null=True
     )
     contact_name = models.CharField(
-        pgettext_lazy("Name of Contact", "Contact Name"), max_length=120
+        pgettext_lazy("Name of Contact", "Contact Name"), max_length=120, null=True, blank=True
     )
     contacts = models.ManyToManyField(
         "contacts.Contact", related_name="account_contacts"
     )
-    assigned_to = models.ManyToManyField(Profile, related_name="account_assigned_users")
+    assigned_to = models.ManyToManyField(Profile, related_name="account_assigned_users", max_length=120, null=True, blank=True)
     teams = models.ManyToManyField(Teams, related_name="account_teams")
     org = models.ForeignKey(
         Org,

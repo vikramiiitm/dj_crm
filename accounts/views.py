@@ -50,7 +50,8 @@ class AccountsListView(APIView, LimitOffsetPagination):
     model = Account
 
     def get_context_data(self, **kwargs):
-        params = self.request.post_data
+        print('k:', kwargs)
+        params = self.request.query_params
         queryset = self.model.objects.filter(org=self.request.org).order_by("-id")
         if self.request.profile.role != "ADMIN" and not self.request.profile.is_admin:
             queryset = queryset.filter(
@@ -127,7 +128,7 @@ class AccountsListView(APIView, LimitOffsetPagination):
         tags=["Accounts"], manual_parameters=swagger_params.account_post_params
     )
     def post(self, request, *args, **kwargs):
-        params = self.request.query_params
+        params = request.post_data
         print(f"post: ", params)
         serializer = AccountCreateSerializer(
             data=params, request_obj=request, account=True

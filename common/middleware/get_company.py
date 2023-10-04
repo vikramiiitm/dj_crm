@@ -10,6 +10,7 @@ from common.models import Org, Profile, User
 
 def set_profile_request(request, org, token):
     # we are decoding the token
+    print(f"token: {token}, org: {org}")
     decoded = jwt.decode(token, (settings.SECRET_KEY), algorithms=[settings.JWT_ALGO])
 
     request.user = User.objects.get(id=decoded["user_id"])
@@ -18,6 +19,7 @@ def set_profile_request(request, org, token):
         request.profile = Profile.objects.get(
             user=request.user, org=org, is_active=True
         )
+        print(f'request.profile: {request.profile.org}')
         request.profile.role = "ADMIN"
         request.profile.save()
         if request.profile is None:
@@ -41,9 +43,10 @@ class GetProfileAndOrg(object):
         # here I am getting the the jwt token passing in header
         if request.headers.get("Authorization"):
             token1 = request.headers.get("Authorization")
-
+            print("token1: ", token1)
             token = token1.split(" ")[1]  # getting the token value
             if request.headers.get("org"):
+                print('request.headers.get("org"): ',request.headers.get("org"))
                 org_id = request.headers.get("org")
                 org = Org.objects.get(id=org_id)
                 if org:
