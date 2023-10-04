@@ -33,7 +33,7 @@ class LeadListView(APIView, LimitOffsetPagination):
     permission_classes = (IsAuthenticated,)
 
     def get_context_data(self, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         queryset = (
             self.model.objects.filter(org=self.request.org)
             .exclude(status="converted")

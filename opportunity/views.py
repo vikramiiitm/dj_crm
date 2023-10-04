@@ -32,7 +32,7 @@ class OpportunityListView(APIView, LimitOffsetPagination):
     model = Opportunity
 
     def get_context_data(self, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         queryset = self.model.objects.filter(org=self.request.org).order_by("-id")
         accounts = Account.objects.filter(org=self.request.org)
         contacts = Contact.objects.filter(org=self.request.org)

@@ -127,7 +127,8 @@ class AccountsListView(APIView, LimitOffsetPagination):
         tags=["Accounts"], manual_parameters=swagger_params.account_post_params
     )
     def post(self, request, *args, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
+        print(f"post: ", params)
         serializer = AccountCreateSerializer(
             data=params, request_obj=request, account=True
         )
