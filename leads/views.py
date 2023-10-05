@@ -247,7 +247,7 @@ class LeadDetailView(APIView):
         return get_object_or_404(Lead, id=pk)
 
     def get_context_data(self, **kwargs):
-        params = request.post_data
+        params = self.request.query_params
         context = {}
         user_assgn_list = [
             assigned_to.id for assigned_to in self.lead_obj.assigned_to.all()
