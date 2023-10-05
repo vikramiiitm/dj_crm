@@ -149,7 +149,7 @@ class LeadCreateSerializer(serializers.ModelSerializer):
             "org",
             "skype_ID",
             "industry",
-            "company",
+            # "company",
             "organization",
             "probability",
             "close_date",
